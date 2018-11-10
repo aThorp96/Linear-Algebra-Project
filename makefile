@@ -1,19 +1,16 @@
 JAVAC = javac
+JAVA = java
+FLAGS = -g
+LIBS = -cp .:Jama\*:
 
-FLAGS = -classpath
+MAIN = test
+sources = Plotter.java $(MAIN).java
 
-LIBS=./Jama-1.0.3.jar 
+default:
+	$(JAVAC) $(LIBS) $(sources)
 
-.SUFFIXES: .java .class
-
-.java.class:
-	$(JAVAC) $(FLAGS) $(LIBS) $*.java
-
-CLASSES = test.java
-
-default: classes
-
-classes: $(CLASSES:.java=.class)
+run:
+	$(JAVA) $(LIBS) $(MAIN)
 
 clean:
 	$(RM) *.class

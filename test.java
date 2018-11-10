@@ -1,10 +1,21 @@
-import Jama.Matrix;
+
+import Jama.*;
 
 public class test {
 
     public static void main(String[] args ) {
-        double [][] array = {{1,2,3},{1,2,3},{1,2,3}};
-        Matrix m = new Matrix(array);
+        Matrix m = Matrix.random(400, 2);
+        int y = m.getColumnDimension();
+        int x = m.getRowDimension();
+        double[][] arr = m.getArray();
+
+        Plotter plotter = Plotter.getPlotter();
+
+        for (int i = 0; i < x; i++)
+                plotter.plot(arr[i][0], arr[i][1]);
+
+
+        plotter.refresh();
     }
 
 }
