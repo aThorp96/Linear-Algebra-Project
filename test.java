@@ -10,6 +10,7 @@ public class test {
         double[][] arr = m.getArray();
 
         Plotter plotter = Plotter.getPlotter();
+        plotter.setName("Random Plotter");
 
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {

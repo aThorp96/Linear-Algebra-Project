@@ -52,6 +52,13 @@ public class Plotter {
         return plotterSingleton;
     }
 
+    // Set change the window title
+    //
+    //@param name: the new window title.
+    public void setName(String name) {
+        frame.setTitle(name);
+    }
+
     // wrapper for MyCanvas addPoint
     public void plot(int x, int y) {
         canvas.addPoint(x, y);
