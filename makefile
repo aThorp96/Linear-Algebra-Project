@@ -10,6 +10,7 @@ default:
 	$(JAVAC) $(LIBS) $(sources)
 
 run:
+	make
 	$(JAVA) $(LIBS) $(MAIN)
 
 clean:
