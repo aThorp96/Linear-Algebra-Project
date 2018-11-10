@@ -5,5 +5,5 @@ This project will
 - Allow adjustable parabolic lenses
 - Render light traces through the lens on a plane
 
-#Usage
+## Usage
 1. To run: `make run`
