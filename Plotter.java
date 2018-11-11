@@ -61,22 +61,32 @@ public class Plotter {
 
     // wrapper for MyCanvas addPoint
     public void plot(int x, int y) {
-        canvas.addPoint(x, y);
+        canvas.addPoint(x, y, Color.WHITE);
+    }
+
+    // wrapper for MyCanvas addPoint
+    public void plot(int x, int y, Color color) {
+        canvas.addPoint(x, y, color);
     }
 
     // wrapper for MyCanvas removePoint
     public void unPlot(int x, int y) {
-        canvas.removePoint(x, y);
+        canvas.addPoint(x, y, Color.BLACK);
+    }
+
+    // wrapper for MyCanvas addPoint
+    public void plot(double x, double y, Color color) {
+        canvas.addPoint((int) (x + 0.5), (int)(y + 0.5), color);
     }
 
     // wrapper for MyCanvas addPoint
     public void plot(double x, double y) {
-        canvas.addPoint((int) (x + 0.5), (int)(y + 0.5));
+        canvas.addPoint((int) (x + 0.5), (int)(y + 0.5), Color.WHITE);
     }
 
     // wrapper for MyCanvas removePoint
     public void unPlot(double x, double y) {
-        canvas.removePoint((int) (x + 0.5), (int)(y + 0.5));
+        canvas.addPoint((int) (x + 0.5), (int)(y + 0.5), Color.BLACK);
     }
 
     // Wrapper for canvas repaint
@@ -113,17 +123,18 @@ public class Plotter {
 
         int xDimension;
         int yDimension;
-        boolean[][] data;
-        Color color;
+        Color[][] data;
 
         // No-arg constructor sets the default size to 400x400
         public MyCanvas() {
             xDimension = 400;
             yDimension = 400;
-            data = new boolean[yDimension][xDimension];
+            data = new Color[yDimension][xDimension];
             setBackground (Color.BLACK);
             setSize(xDimension, yDimension);
-            color = Color.WHITE;
+            for (int i = 0; i < xDimension; i++)
+                for (int j = 0; j < yDimension; j++)
+                    data[i][j] = Color.BLACK;
         }
 
         // two arg sontructor allows for custom size XxY
@@ -133,11 +144,12 @@ public class Plotter {
         public MyCanvas(int x, int y) {
             xDimension = x;
             yDimension = y;
-            data = new boolean[yDimension][xDimension];
+            data = new Color[yDimension][xDimension];
             setBackground (Color.BLACK);
             setSize(xDimension, yDimension);
-            color = Color.WHITE;
-        }
+            for (int i = 0; i < xDimension; i++)
+                for (int j = 0; j < yDimension; j++)
+                    data[i][j] = Color.BLACK;        }
 
         // paint replots all the points on the graph.
         // the points are all plotted in the color according to the color field
@@ -147,28 +159,18 @@ public class Plotter {
         // @param g: the internal Graphic. Not accessable in the current scope.
         public void paint(Graphics g) {
             // reset the color in case of change
-            g.setColor(color);
             //Iterate through the data
             for(int i = 0; i < xDimension; i++) {
                 for (int j = 0; j < yDimension; j++) {
-                    if (data[i][j]) g.fillRect(i, j, 1, 1);
+                    g.setColor(data[i][j]);
+                    g.fillRect(i, j, 1, 1);
                 }
             }
         }
 
         // Adds a point to the data map
-        private void addPoint(int x, int y) {
-            data[x][y] = true;
-        }
-
-        // removes a point from the data map
-        private void removePoint(int x, int y) {
-            data[x][y] = false;
-        }
-
-        // Change the plot color
-        private void setColor(Color c) {
-            this.color = c;
+        private void addPoint(int x, int y, Color color) {
+            data[x][y] = color;
         }
     }
 }

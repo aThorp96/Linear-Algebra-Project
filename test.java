@@ -1,5 +1,6 @@
 
 import Jama.*;
+import java.awt.Color;
 
 public class test {
 
@@ -14,7 +15,7 @@ public class test {
 
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
-                plotter.plot(399 * arr[i][0], 399 * arr[i][1]);
+                plotter.plot(399 * arr[i][0], 399 * arr[i][1], (i % 2 == 0) ? Color.GREEN : Color.RED);
                 System.out.printf("Index [%d,%d]: %f\n", i, j, 400 * arr[i][j]);
             }
         }
