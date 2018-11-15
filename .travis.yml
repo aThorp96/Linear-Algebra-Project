@@ -1,8 +1,4 @@
 os: linux
-before_install:
-  - sudo apt install default-jdk
-language: bash
-
-
-script:
-    - make
+language: java
+script: 
+  - javac -cp .:Jama\*: *.java
