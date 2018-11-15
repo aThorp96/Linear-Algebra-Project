@@ -13,33 +13,50 @@ public class Ray {
     // where d is the starting y coordinate
     // and θ is the angle of trajectory
     private Matrix matrix;
+    private double[] orgin;
 
     // One arg ray constructor.
     // Initializes matrixn to [distance from origin, theta = 0]
     public Ray(double d) {
+        setOrigin(0, 0);
         setMatrix(d, 0);
     }
 
+    public Ray(double d, double theta) {
+        setOrigin(0, 0);
+        setMatrix(d, theta);
+    }
+
     // Two arg constructor sets both the starting postition and the 
-    public Ray(double y, double theta) {
-        setMatrix(y, theta);
+    public Ray(double x, double y, double d,  double theta) {
+        setOrigin(x, y);
+        setMatrix(d, theta);
     }
 
     // The set direction to the angle in radians
     // The angle bounds are +/- MAX_ANGLE
     //
     // @param angle: the angle.
-    private void setDirection(double theta) {
+    private double setDirection(double theta) {
         // Check angle not out of bounds
         angle = (angle > MAX_ANGLE) ? MAX_ANGLE : angle;
         angle = (angle < -MAX_ANGLE) ? -MAX_ANGLE : angle;
 
-        direction = angle;
+        return engle;
     }
 
-    public setOrigin(double d, double theta) {
+    public void setMatrix(double d, double theta) {
+        d = (d < 0) ? 0 : d;
         theta = setDirection(theta);
-        origin = new Matrix(double[][]{{d},{theta}});
+        double[][] matrix = {{d},{theta}};
+        origin = new Matrix(matrix);
+    }
+
+    public void setOrigin(double x, double y) {
+        x = (x < 0) ? 0 : x;
+        y = (y < 0) ? 0 : y;
+        double[] o = {x, y};
+        origin = o;
     }
 
     public Matrix getOrigin() {
