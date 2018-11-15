@@ -1,5 +1,5 @@
-import jama.Matrix;
-import java.util.Math;
+import Jama.Matrix;
+import java.lang.Math;
 
 public class Ray {
 
@@ -13,7 +13,7 @@ public class Ray {
     // where d is the starting y coordinate
     // and θ is the angle of trajectory
     private Matrix matrix;
-    private double[] orgin;
+    private double[] origin;
 
     // One arg ray constructor.
     // Initializes matrixn to [distance from origin, theta = 0]
@@ -39,17 +39,17 @@ public class Ray {
     // @param angle: the angle.
     private double setDirection(double theta) {
         // Check angle not out of bounds
-        angle = (angle > MAX_ANGLE) ? MAX_ANGLE : angle;
-        angle = (angle < -MAX_ANGLE) ? -MAX_ANGLE : angle;
+        theta = (theta > MAX_ANGLE) ? MAX_ANGLE : theta;
+        theta = (theta < -MAX_ANGLE) ? -MAX_ANGLE : theta;
 
-        return engle;
+        return theta;
     }
 
     public void setMatrix(double d, double theta) {
         d = (d < 0) ? 0 : d;
         theta = setDirection(theta);
         double[][] matrix = {{d},{theta}};
-        origin = new Matrix(matrix);
+        this.matrix = new Matrix(matrix);
     }
 
     public void setOrigin(double x, double y) {
@@ -59,17 +59,23 @@ public class Ray {
         origin = o;
     }
 
-    public Matrix getOrigin() {
-        return origin;
+    public Matrix getMatrix() {
+        return matrix;
     }
 
-    public double[][] getOrigin() {
-        return origin.toArrayCopy();
+    public double[][] getMatrixAsArray() {
+        return matrix.getArrayCopy();
+    }
+
+    public double[] getOrigin() {
+        return origin;
     }
 
     public Matrix goDistance(double distance) {
         double[][] distanceTransformation = {{1, distance},{0,1}};
-        Matrix result = origin.times(distanceFormula);
+        Matrix result = matrix.times(new Matrix(distanceTransformation));
+        return result;
     }
+
 }
 

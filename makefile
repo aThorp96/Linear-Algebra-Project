@@ -4,7 +4,7 @@ FLAGS = -g
 LIBS = -cp .:Jama\*:
 
 MAIN = test
-sources = Plotter.java $(MAIN).java
+sources = Plotter.java Ray.java $(MAIN).java
 
 default:
 	$(JAVAC) $(LIBS) $(sources)
