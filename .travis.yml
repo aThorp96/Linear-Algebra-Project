@@ -1,5 +1,6 @@
 os: linux
-language: java
+before_install:
+  - sudo apt install default-jdk
 language: bash
 
 
