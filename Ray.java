@@ -55,3 +55,4 @@ public class Ray {
         Matrix result = origin.times(distanceFormula);
     }
 }
+
