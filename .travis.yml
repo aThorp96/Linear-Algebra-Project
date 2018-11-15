@@ -1,4 +1,7 @@
 os: linux
+language: java
 language: bash
+
+
 script:
     - make
