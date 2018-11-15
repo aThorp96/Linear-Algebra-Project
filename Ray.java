@@ -73,7 +73,8 @@ public class Ray {
 
     public Matrix goDistance(double distance) {
         double[][] distanceTransformation = {{1, distance},{0,1}};
-        Matrix result = matrix.times(new Matrix(distanceTransformation));
+        Matrix transformationMatrix = new Matrix(distanceTransformation);
+        Matrix result = transformationMatrix.times(matrix);
         return result;
     }
 
