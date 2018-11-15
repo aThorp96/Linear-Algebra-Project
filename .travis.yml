@@ -1,4 +1,4 @@
 os: linux
 language: java
 script: 
-  - javac -cp .:Jama\*: *.java
+  - "javac -cp .:Jama\*: *.java"
