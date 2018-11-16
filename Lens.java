@@ -57,4 +57,11 @@ public class Lens
     {
         return new Matrix(-1, -1);
     }
+
+    // refract takes in a ray that may or may not cross the lens
+    // and return the resulting refracted ray.
+    // @param rayIn: the ray that crosses the lens
+    public Ray refract(Ray rayIn)  {
+
+    }
 }
