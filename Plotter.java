@@ -13,6 +13,8 @@ import java.awt.event.*;
 
 
 public class Plotter {
+
+    public static final Color LENS_COLOR = new Color(0xd9e5fc);
     private static Plotter plotterSingleton;
     private Frame frame;
     private Panel controlPanel;
@@ -59,36 +61,6 @@ public class Plotter {
         frame.setTitle(name);
     }
 
-    // wrapper for MyCanvas addPoint
-    public void plot(int x, int y) {
-        canvas.addPoint(x, y, Color.WHITE);
-    }
-
-    // wrapper for MyCanvas addPoint
-    public void plot(int x, int y, Color color) {
-        canvas.addPoint(x, y, color);
-    }
-
-    // wrapper for MyCanvas removePoint
-    public void unPlot(int x, int y) {
-        canvas.addPoint(x, y, Color.BLACK);
-    }
-
-    // wrapper for MyCanvas addPoint
-    public void plot(double x, double y, Color color) {
-        canvas.addPoint((int) (x + 0.5), (int)(y + 0.5), color);
-    }
-
-    // wrapper for MyCanvas addPoint
-    public void plot(double x, double y) {
-        canvas.addPoint((int) (x + 0.5), (int)(y + 0.5), Color.WHITE);
-    }
-
-    // wrapper for MyCanvas removePoint
-    public void unPlot(double x, double y) {
-        canvas.addPoint((int) (x + 0.5), (int)(y + 0.5), Color.BLACK);
-    }
-
     // Wrapper for canvas repaint
     public void refresh() {
         canvas.repaint();
@@ -123,18 +95,18 @@ public class Plotter {
 
         int xDimension;
         int yDimension;
-        Color[][] data;
+        Color lensColor;
+        Color lazerColor;
+        Lens lens;
+        Ray[] rays;
 
         // No-arg constructor sets the default size to 400x400
         public MyCanvas() {
+            lensColor = LENS_COLOR;
+            lazerColor = Color.RED;
             xDimension = 400;
             yDimension = 400;
-            data = new Color[yDimension][xDimension];
-            setBackground (Color.BLACK);
-            setSize(xDimension, yDimension);
-            for (int i = 0; i < xDimension; i++)
-                for (int j = 0; j < yDimension; j++)
-                    data[i][j] = Color.BLACK;
+            setBackground (Color.WHITE);
         }
 
         // two arg sontructor allows for custom size XxY
@@ -144,12 +116,9 @@ public class Plotter {
         public MyCanvas(int x, int y) {
             xDimension = x;
             yDimension = y;
-            data = new Color[yDimension][xDimension];
             setBackground (Color.BLACK);
             setSize(xDimension, yDimension);
-            for (int i = 0; i < xDimension; i++)
-                for (int j = 0; j < yDimension; j++)
-                    data[i][j] = Color.BLACK;        }
+        }
 
         // paint replots all the points on the graph.
         // the points are all plotted in the color according to the color field
@@ -162,15 +131,43 @@ public class Plotter {
             //Iterate through the data
             for(int i = 0; i < xDimension; i++) {
                 for (int j = 0; j < yDimension; j++) {
-                    g.setColor(data[i][j]);
-                    g.fillRect(i, j, 1, 1);
                 }
             }
         }
 
-        // Adds a point to the data map
-        private void addPoint(int x, int y, Color color) {
-            data[x][y] = color;
+        private void paintLens(Graphics g) {
+            g.setColor(lensColor);
+            int[][] points = calculateLensPoints();
+            for (int[] i : points) g.fillRect(i[0], i[1], 1, 1);
+        }
+
+        private void paintRays(Graphics g) {
+
+        }
+
+        private int[][]  calculateLensPoints() {
+            int size = (int) ( 0.5 + lens.getRadius());
+            int[][] points = new int[size * 2][2];
+            for (int i = 0; i < points.length; i += 2) {
+                int x = (int) (i - lens.getVertex());
+                int y = (int) (lens.getEdge(i) + 0.5);
+                points[i] = new int[]{x, y};
+                points[i + 1] = new int[]{x, -y};
+            }
+            return points;
+        }
+
+        // Adds a ray object to the list.
+        // Ray numbers:
+        // 0: The starting ray
+        // 1: The ray inside the lens
+        // 3: The exit ray
+        private void setRay(int rayNumber, Ray ray) {
+            if (ray != null) rays[rayNumber] = ray;
+        }
+
+        private void setLens(Lens lens) {
+            if (lens != null) this.lens = lens;
         }
     }
 }
