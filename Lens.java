@@ -4,8 +4,20 @@ public class Lens
 {
     private enum Material
     {
-        GLASS, ACRYLIC
+        GLASS   (1.58);
+        ACRYLIC (1.491);
+
+        private final double refractionIndex;
+
+        public Material(double rID) {
+            refractionIndex = rID;
+        }
+
+        public double getRefractionIndex() {
+            return refractionIndex;
+        }
     }
+
     private Material material;
 
     private double focalLength;
