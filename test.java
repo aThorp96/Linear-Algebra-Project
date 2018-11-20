@@ -1,7 +1,8 @@
 
 import Jama.*;
 import java.util.Arrays;
-import java.awt.Color;
+import java.awt.*;
+import java.util.concurrent.TimeUnit;
 
 public class test {
 
@@ -20,19 +21,29 @@ public class test {
             }
         }
 
-
         Plotter plotter = Plotter.getPlotter();
         plotter.setName("Random Plotter");
 
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
-                //plotter.plot(arr[i][0], arr[i][1], Color.RED);
-                System.out.printf("Index [%d,%d]: %f\n", i, j, arr[i][j]);
+        Lens testLens = new Lens(100d, 0d, Material.GLASS, 100d);
+        plotter.setLens(testLens);
+        plotter.refresh();
+        for (int i = 5; i < 100; i += 2) {
+            testLens.setThickness(i);
+            plotter.refresh();
+            try {
+                TimeUnit.MILLISECONDS.sleep(100);
+            } catch (Exception e) {
             }
         }
 
-        plotter.refresh();
-
+        for (int i = (int) testLens.getFocalLength() ; i > 0; i -= 2) {
+            testLens.setFocalLength(i);
+            plotter.refresh();
+            try {
+                TimeUnit.MILLISECONDS.sleep(100);
+            } catch (Exception e) {
+            }
+        }
     }
 
 }
