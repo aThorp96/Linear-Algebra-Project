@@ -10,9 +10,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.Random;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.QuadCurve2D;
 
 
 public class Plotter {
+
+    public static final Color LENS_COLOR = new Color(0xd9e5fc);
     private static Plotter plotterSingleton;
     private Frame frame;
     private Panel controlPanel;
@@ -59,34 +62,8 @@ public class Plotter {
         frame.setTitle(name);
     }
 
-    // wrapper for MyCanvas addPoint
-    public void plot(int x, int y) {
-        canvas.addPoint(x, y, Color.WHITE);
-    }
-
-    // wrapper for MyCanvas addPoint
-    public void plot(int x, int y, Color color) {
-        canvas.addPoint(x, y, color);
-    }
-
-    // wrapper for MyCanvas removePoint
-    public void unPlot(int x, int y) {
-        canvas.addPoint(x, y, Color.BLACK);
-    }
-
-    // wrapper for MyCanvas addPoint
-    public void plot(double x, double y, Color color) {
-        canvas.addPoint((int) (x + 0.5), (int)(y + 0.5), color);
-    }
-
-    // wrapper for MyCanvas addPoint
-    public void plot(double x, double y) {
-        canvas.addPoint((int) (x + 0.5), (int)(y + 0.5), Color.WHITE);
-    }
-
-    // wrapper for MyCanvas removePoint
-    public void unPlot(double x, double y) {
-        canvas.addPoint((int) (x + 0.5), (int)(y + 0.5), Color.BLACK);
+    public void setLens(Lens lens) {
+        canvas.setLens(lens);
     }
 
     // Wrapper for canvas repaint
@@ -94,62 +71,24 @@ public class Plotter {
         canvas.repaint();
     }
 
-/*    public static void main(String[] args) {
-        Plotter plotter = Plotter.getPlotter();
-        Random r = new Random();
-        for (int i = 0; i < 400; i++) {
-            plotter.plot(r.nextInt(400), r.nextInt(400));
-        }
-
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (Exception e) {
-        }
-
-        plotter.canvas.setColor(Color.RED);
-
-        for (int i = 0; i < 800; i++) {
-            plotter.plot(r.nextInt(400), r.nextInt(400));
-        }
-
-        plotter.refresh();
-    }
-
-*/    /**
-        MyCanvas is the canvas that handles the plotting of points.
-        Plotter is effectively a wrapper for the canvas.
-    */
     class MyCanvas extends Canvas {
 
         int xDimension;
         int yDimension;
-        Color[][] data;
+        Color lensColor;
+        Color lazerColor;
+        Lens lens;
+        Ray[] rays;
 
         // No-arg constructor sets the default size to 400x400
         public MyCanvas() {
+            lensColor = LENS_COLOR;
+            lazerColor = Color.RED;
             xDimension = 400;
             yDimension = 400;
-            data = new Color[yDimension][xDimension];
-            setBackground (Color.BLACK);
+            setBackground (Color.WHITE);
             setSize(xDimension, yDimension);
-            for (int i = 0; i < xDimension; i++)
-                for (int j = 0; j < yDimension; j++)
-                    data[i][j] = Color.BLACK;
         }
-
-        // two arg sontructor allows for custom size XxY
-        //
-        //@param x the x dimension
-        //@param y: the y dimension
-        public MyCanvas(int x, int y) {
-            xDimension = x;
-            yDimension = y;
-            data = new Color[yDimension][xDimension];
-            setBackground (Color.BLACK);
-            setSize(xDimension, yDimension);
-            for (int i = 0; i < xDimension; i++)
-                for (int j = 0; j < yDimension; j++)
-                    data[i][j] = Color.BLACK;        }
 
         // paint replots all the points on the graph.
         // the points are all plotted in the color according to the color field
@@ -158,19 +97,33 @@ public class Plotter {
         // ** This should never be called directly **
         // @param g: the internal Graphic. Not accessable in the current scope.
         public void paint(Graphics g) {
+        System.out.println("painting");
             // reset the color in case of change
             //Iterate through the data
-            for(int i = 0; i < xDimension; i++) {
-                for (int j = 0; j < yDimension; j++) {
-                    g.setColor(data[i][j]);
-                    g.fillRect(i, j, 1, 1);
-                }
-            }
+            paintLens(g);
         }
 
-        // Adds a point to the data map
-        private void addPoint(int x, int y, Color color) {
-            data[x][y] = color;
+        private void paintLens(Graphics g) {
+            g.setColor(Color.BLACK);
+            ((Graphics2D)g).draw(lens.getPath());
+
+        }
+
+        private void paintRays(Graphics g) {
+
+        }
+
+        // Adds a ray object to the list.
+        // Ray numbers:
+        // 0: The starting ray
+        // 1: The ray inside the lens
+        // 3: The exit ray
+        private void setRay(int rayNumber, Ray ray) {
+            if (ray != null) rays[rayNumber] = ray;
+        }
+
+        private void setLens(Lens lens) {
+            if (lens != null) this.lens = lens;
         }
     }
 }
