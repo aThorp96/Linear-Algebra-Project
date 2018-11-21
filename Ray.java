@@ -1,5 +1,6 @@
 import Jama.Matrix;
 import java.lang.Math;
+import java.awt.geom.Line2D;
 
 public class Ray {
 
@@ -18,11 +19,18 @@ public class Ray {
 
     // One arg ray constructor.
     // Initializes matrixn to [distance from origin, theta = 0]
+    //
+    // @param d: distance of ray
     public Ray(double d) {
-        setOrigin(0, 0);
+        setOrigin(50, 200);
         setMatrix(d, 0);
     }
 
+    // Two arg constructor.
+    // Initializes the ray to an angle and distance
+    //
+    // @param d: ray length
+    // @param theta: angle of ray (Radians)
     public Ray(double d, double theta) {
         setOrigin(0, d);
         setMatrix(d, theta);
@@ -87,6 +95,16 @@ public class Ray {
 
     public double getY() {
         return y;
+    }
+
+    public Line2D.Double getLine() {
+        double theta = Math.atan(matrix.getArray()[1][0]);
+        double hypot = matrix.getArray()[0][0];
+        int x1 = (int) (0.5 + x);
+        int y1 = (int) (0.5 + y);
+        int y2 = -(x1 + (int) (0.5 + (hypot / Math.acos(theta))));
+        int x2 = -(y1 + (int) (0.5 + (hypot / Math.asin(theta))));
+        return new Line2D.Double(x1, y1, x2, y2);
     }
 
 }

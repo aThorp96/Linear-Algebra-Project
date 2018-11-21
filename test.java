@@ -24,26 +24,16 @@ public class test {
         Plotter plotter = Plotter.getPlotter();
         plotter.setName("Random Plotter");
 
-        Lens testLens = new Lens(100d, 0d, Material.GLASS, 100d);
+        Lens testLens = new Lens(100d, 10d, Material.GLASS, 10d);
         plotter.setLens(testLens);
-        plotter.refresh();
-        for (int i = 5; i < 100; i += 2) {
-            testLens.setThickness(i);
-            plotter.refresh();
-            try {
-                TimeUnit.MILLISECONDS.sleep(100);
-            } catch (Exception e) {
-            }
-        }
 
-        for (int i = (int) testLens.getFocalLength() ; i > 0; i -= 2) {
-            testLens.setFocalLength(i);
-            plotter.refresh();
-            try {
-                TimeUnit.MILLISECONDS.sleep(100);
-            } catch (Exception e) {
-            }
-        }
+        Ray ray1 = new Ray(100);
+        plotter.setRay(ray1, 0);
+
+        plotter.refresh();
+
+
+        //System.exit(0);
     }
 
 }

@@ -11,6 +11,7 @@ import java.util.Random;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.QuadCurve2D;
+import java.awt.geom.Area;
 
 
 public class Plotter {
@@ -66,6 +67,10 @@ public class Plotter {
         canvas.setLens(lens);
     }
 
+    public void setRay(Ray ray, int index) {
+        canvas.setRay(ray, index);
+    }
+
     // Wrapper for canvas repaint
     public void refresh() {
         canvas.repaint();
@@ -84,9 +89,10 @@ public class Plotter {
         public MyCanvas() {
             lensColor = LENS_COLOR;
             lazerColor = Color.RED;
+            setBackground (Color.WHITE);
+            rays = new Ray[3];
             xDimension = 400;
             yDimension = 400;
-            setBackground (Color.WHITE);
             setSize(xDimension, yDimension);
         }
 
@@ -101,16 +107,25 @@ public class Plotter {
             // reset the color in case of change
             //Iterate through the data
             paintLens(g);
+            paintRays(g);
         }
 
         private void paintLens(Graphics g) {
+            //TODO fill the lens
+            // g.setColor(lensColor);
+            // ((Graphics2D)g).fill(new Area(lens.getPath()));
             g.setColor(Color.BLACK);
             ((Graphics2D)g).draw(lens.getPath());
 
         }
 
         private void paintRays(Graphics g) {
+            g.setColor(Color.RED);
+            for(int i = 0; i < 3; i++) paintRay(g, rays[i]);
+        }
 
+        private void paintRay(Graphics g, Ray ray) {
+            if (ray != null) ((Graphics2D) g).draw(ray.getLine());
         }
 
         // Adds a ray object to the list.
@@ -118,7 +133,7 @@ public class Plotter {
         // 0: The starting ray
         // 1: The ray inside the lens
         // 3: The exit ray
-        private void setRay(int rayNumber, Ray ray) {
+        private void setRay(Ray ray, int rayNumber) {
             if (ray != null) rays[rayNumber] = ray;
         }
 
