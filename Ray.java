@@ -4,7 +4,7 @@ import java.awt.geom.Line2D;
 
 public class Ray {
 
-    private final double MAX_ANGLE = Math.PI / 3;
+    private final double MAX_ANGLE = 1;
 
     //matrix if of the form
     // 
@@ -42,11 +42,15 @@ public class Ray {
         setMatrix(y, theta);
     }
 
+    public void setDirection(double theta) {
+        matrix.set(1, 0, theta);
+    }
+
     // The set direction to the angle in radians
     // The angle bounds are +/- MAX_ANGLE
     //
     // @param angle: the angle.
-    private double setDirection(double theta) {
+    private double changeDirection(double theta) {
         // Check angle not out of bounds
         theta = (theta > MAX_ANGLE) ? MAX_ANGLE : theta;
         theta = (theta < -MAX_ANGLE) ? -MAX_ANGLE : theta;
@@ -56,7 +60,7 @@ public class Ray {
 
     public void setMatrix(double d, double theta) {
         d = (d < 0) ? 0 : d;
-        double s = Math.tan(setDirection(theta));
+        double s = Math.tan(changeDirection(theta));
         double[][] matrix = {{d},{s}};
         this.matrix = new Matrix(matrix);
     }
@@ -102,8 +106,18 @@ public class Ray {
         double hypot = matrix.getArray()[0][0];
         int x1 = (int) (0.5 + x);
         int y1 = (int) (0.5 + y);
-        int y2 = -(x1 + (int) (0.5 + (hypot / Math.acos(theta))));
-        int x2 = -(y1 + (int) (0.5 + (hypot / Math.asin(theta))));
+
+        int y2 = y1;
+        int x2 = x1 + (int) hypot;
+
+        if (theta != 0) {
+            System.out.println("Theta != 0");
+            x2 = (x1 + (int) (0.5 + (hypot * Math.cos(theta))));
+            y2 = (y1 - (int) (0.5 + (hypot * Math.sin(theta))));
+        }
+
+        System.out.printf("Ray[%f, %f]\n", hypot, theta);
+        System.out.printf("Point1[%d, %d]\nPoint2[%d, %d]\n\n", x1, y1, x2, y2);
         return new Line2D.Double(x1, y1, x2, y2);
     }
 
