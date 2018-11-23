@@ -27,27 +27,21 @@ public class test {
         Lens testLens = new Lens(100d, 10d, Material.GLASS, 10d);
         plotter.setLens(testLens);
 
-        Ray ray1 = new Ray(90);
+        Ray ray1 = new Ray(90, 0.5);
         plotter.setRay(ray1, 0);
-
         plotter.refresh();
-        double angle = 0;
 
+        double angle = 0;
         for(int i = 0; i < 100; i++) {
             testLens.setFocalLength(i);
-            if (i / 50 == 1) {
-                angle -= 0.05;
-            } else {
-                angle += 0.1;
-            }
-            ray1.setDirection(angle);
+            ray1.rotate(0.01);
+
             plotter.refresh();
             try {
-            TimeUnit.MILLISECONDS.sleep(100);
+            TimeUnit.MILLISECONDS.sleep(200);
             } catch (Exception e) {}
         }
 
-        //System.exit(0);
     }
 
 }
