@@ -13,14 +13,6 @@ public class test {
 
         int n = 0;
 
-        for (int i = 0; i < 200; i++) {
-            for (int j = 0; j < 200; j++) {
-                double[] tuple = {i * 2, j * 2};
-                arr[n] = tuple;
-                n++;
-            }
-        }
-
         Plotter plotter = Plotter.getPlotter();
         plotter.setName("Random Plotter");
 
