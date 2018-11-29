@@ -79,9 +79,9 @@ public class Model {
         int origY = (int) ray.getY();
 
         int x1 = (int) (0.5 +  startX);
-        int y1 = origY - (int) (0.5 +  ray.getY(x1 - origX));
+        int y1 = (int) (0.5 +  ray.getY(x1 - origX));
         int x2 = (int) (0.5 +  endX);
-        int y2 = origY - (int) (0.5 +  ray.getY(x2 - origX));
+        int y2 = (int) (0.5 +  ray.getY(x2 - origX));
 
         int midX = (int) (0.5 +  (x2 + x1) / 2);
         int midY = (int) (0.5 +  y1 - ((y1 - y2) / 2));

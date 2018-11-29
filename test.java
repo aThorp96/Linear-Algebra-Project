@@ -27,8 +27,8 @@ public class test {
         int x2 = (int) ray1.getEnd()[0];
         int y2 = (int) ray1.getEnd()[1];
         System.out.printf("%d, %d, %d, %d, Intersects: %b\n", x1, y1, x2, y2, testLens.getPath().intersects(x1, y1, x2, y2));
-        int[] intersect = model.findIntersect(testLens, ray2);
-        ray2.setDistance(intersect[1]);
+        int[] intersect = model.findIntersect(testLens, ray1);
+        ray1.setDistance(intersect[1]);
         plotter.refresh();
 
     }
