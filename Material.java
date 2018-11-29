@@ -5,9 +5,10 @@
 public enum Material
 {
     ICE     (1.31),
-    GLASS   (1.58),
+    GLASS   (1.54),
     ACRYLIC (1.491),
-    DIAMOND (2.42);
+    DIAMOND (2.42),
+    SILICONE(3.46);
 
     private final double refractionIndex;
 
