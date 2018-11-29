@@ -52,10 +52,10 @@ public class Model {
         int y2 = (int) (0.5 +  r1.getEnd()[1]);
 
         int[] intersect;
-        if (lens.getPath().intersects(x1, y1, x2, y2)){
+        if (lens.getPath().intersects(x1, y1, x2, y2)) {
             intersect = findIntersect(lens, r1);
-            r2 = new ray(intersect[0], intersect[1], 0);
-            Matrix m = lens.refract(r2);
+            r1.setDistance(intersect[1]);
+            r2 = lens.refract(r1, intersect[0], intersect[1]);
         }
         
     }

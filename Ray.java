@@ -77,8 +77,16 @@ public class Ray {
      * @return the corrosponding y value
      **/
     public double getX(double y) {
-        //TODO: Write calculator
-        return Double.NaN;
+        double x = y / Math.sin(getDirection());
+
+        // if theta != 0, x2 = o / tan(theta)
+        if (getDirection() != 0) 
+            x = y / Math.tan(getDirection());
+
+/*        if (x < getX() || Math.abs(y) > Math.abs(matrix.get(0,0)))
+            return Double.NaN;
+        else*/
+            return x; 
     }
 
     /**
@@ -90,8 +98,30 @@ public class Ray {
      * @return the corrosponding y value
      **/
      public double getY(double x) {
-        //TODO: write pair calculator
-        return Double.NaN;
+        double theta = getDirection();
+        double tan = Math.tan(theta);
+        double opposite = x * tan;
+
+/*        // Check bounds
+        if (x < 0 || Math.abs(opposite) > Math.abs(matrix.get(0,0))) {
+            System.out.println("NaN");
+            return Double.NaN;
+        } else */
+            return opposite;
+    }
+
+    /**
+    * returns the tuple coordinates of the end of the ray.
+    **/
+    public double[] getEnd() {
+        double y = this.y - matrix.get(0,0);
+        double x = this.x + (int) (0.5 + (matrix.get(0,0) / Math.sin(getDirection())));
+
+        // if theta != 0, x2 = o / tan(theta)
+        if (getDirection() != 0) 
+            x = this.x + (int) (0.5 + (matrix.get(0,0) / Math.tan(getDirection())));
+
+        return new double[]{x, y};
     }
 
     public Matrix getMatrix() {
@@ -126,6 +156,10 @@ public class Ray {
         this.matrix = new Matrix(matrix);
     }
 
+    public void setMatrix(Matrix m) {
+        this.matrix = m;
+    }
+
     public void setOrigin(double x, double y) {
         this.x = (x < 0) ? 0 : x;
         this.y = y;
@@ -149,35 +183,18 @@ public class Ray {
             double opposite = matrix.get(0,0);
             double oppositePrime = y - ((opposite * sinThetaPrime) / sinTheta);
 
-            System.out.printf("concreteAngle: %f\n sinTheta: %f\n sinThetaPrime: %f\n opposite: %f\n oppositePrime: %f\n",concreteAngle,  sinTheta, sinThetaPrime, opposite, oppositePrime);
-
             matrix.set(0,0, oppositePrime);
             setDirection(concreteAngle);
         }
     }
 
     public Line2D.Double getLine() {
+        double[] end = getEnd();
+
         int x1 = (int) (0.5 + x);
         int y1 = (int) (0.5 + y);
-
-        int y2 = y1 - (int) (0.5 + matrix.get(0,0));
-        // if theta == 0 then x2 = hypotonus
-        int x2 = x1 + (int) (0.5 + (matrix.get(0,0) / Math.sin(getDirection())));
-
-        // if theta != 0, x2 = o / tan(theta)
-        if (getDirection() != 0) {
-            x2 = x1 + (int) (0.5 + (matrix.get(0,0) / Math.tan(getDirection())));
-        }
-
-        System.out.printf("x1: %d\n", x1);
-        System.out.printf("y1: %d\n", y1);
-        System.out.printf("x2: %d\n", x2);
-        System.out.printf("y2: %d\n", y2);
-        int o = y2 - y1;
-        int a = x2 - x1;
-        double h = Math.sqrt((double) (o * o) + (a * a));
-        System.out.printf("Hypotenuse: %f\n", h);
-        System.out.printf("angle(Radians): %f\n\n", getDirection());
+        int x2 = (int) (0.5 + end[0]);
+        int y2 = (int) (0.5 + end[1]);
 
         return new Line2D.Double(x1, y1, x2, y2);
     }

@@ -7,14 +7,11 @@ import java.util.concurrent.TimeUnit;
 public class test {
 
     public static void main(String[] args ) {
-        int y = 2;
-        int x = 40000;
-        double[][] arr = new double[40000][2];
 
-        int n = 0;
 
         Plotter plotter = Plotter.getPlotter();
         plotter.setName("Random Plotter");
+        Model model = new Model(400);
 
         Lens testLens = new Lens(100d, 10d, Material.GLASS, 10d);
         plotter.setLens(testLens);
@@ -22,17 +19,14 @@ public class test {
         Ray ray1 = new Ray(90, 0.5);
         plotter.setRay(ray1, 0);
         plotter.refresh();
-
-        double angle = 0;
-        for(int i = 0; i < 100; i++) {
-            testLens.setFocalLength(i);
-            ray1.rotate(0.01);
-
-            plotter.refresh();
-            try {
-            TimeUnit.MILLISECONDS.sleep(200);
-            } catch (Exception e) {}
-        }
+        int x1 = (int) ray1.getX();
+        int y1 = (int) ray1.getY();
+        int x2 = (int) ray1.getEnd()[0];
+        int y2 = (int) ray1.getEnd()[1];
+        System.out.printf("%d, %d, %d, %d, Intersects: %b\n", x1, y1, x2, y2, testLens.getPath().intersects(x1, y1, x2, y2));
+        int[] intersect = model.findIntersect(testLens, ray1);
+        ray1.setDistance(intersect[1]);
+        plotter.refresh();
 
     }
 

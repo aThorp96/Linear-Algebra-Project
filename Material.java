@@ -4,6 +4,7 @@
 // Indexes accessable at https://en.wikipedia.org/wiki/List_of_refractive_indices
 public enum Material
 {
+    AIR     (1.000293),
     ICE     (1.31),
     GLASS   (1.58),
     ACRYLIC (1.491),

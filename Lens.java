@@ -70,15 +70,42 @@ public class Lens
         updatePath();
     }
 
-    public Matrix calculateTransformation() {
-        return new Matrix(-1, -1);
+    public double getFocalRadius(double x, double y) {
+        double b = origin - y;
+        double c = origin - x;
+        c += (x <= origin) ? focalLength : -focalLength;
+        return Math.sqrt(c * c + b + b);
     }
 
     // refract takes in a ray that may or may not cross the lens
     // and return the resulting refracted ray.
     // @param rayIn: the ray that crosses the lens
-    public Ray refract(Ray rayIn)  {
-        return null;
+    public Ray refract(Ray rayIn, int x, int y)  {
+        Matrix s = rayIn.getMatrix();
+        Matrix R = new Matrix(2, 2);
+
+        double m1;
+        double m2;
+        double r = getFocalRadius(x, y);
+
+        if (x <= origin) {
+            m1 = Material.AIR.getRefractionIndex();
+            m2 = this.material.getRefractionIndex();
+        } else {
+            m1 = this.material.getRefractionIndex();
+            m2 = Material.AIR.getRefractionIndex();
+        }
+
+        R.set(0, 0, 1);
+        R.set(1, 0, 0);
+        R.set(0, 1, ((m1 - m2) / (r * m2)));
+        R.set(1, 1, m1 / m2);
+
+        Matrix sPrime = R.times(rayIn.getMatrix());
+        Ray rayOut = new Ray(x, y, 0);
+        rayOut.setMatrix(sPrime);
+
+        return rayOut;
     }
 
     // setPath creates the path from the parameters given.
