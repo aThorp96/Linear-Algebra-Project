@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +22,11 @@ import javax.swing.JTextField;
  **/
 public class GUI implements ActionListener, ChangeListener
 {
+    //GUI Outline
     private JFrame frame;
+    private JPanel layout;
+    private Plotter plotter;
+    private Lens lens;
     //Ray Angle
     private JPanel anglePanel;
     private JSlider angleSlider;
@@ -58,17 +63,23 @@ public class GUI implements ActionListener, ChangeListener
      **/
     public GUI(String title, int width, int height)
     {
-        createFrame(title, width, height);
+        createPlotter();
+        int canvasHeight = plotter.getCanvas().getHeight();
+        createFrame(title, width, height + canvasHeight);
         createPanels();
-
-        frame.add(anglePanel);          //Row 1, Col 1
-        frame.add(curvePanel);          //Row 1, Col 2
-        frame.add(rayOriginPanel);      //Row 2, Col 1
-        frame.add(thickPanel);          //Row 2, Col 2
-        frame.add(new JPanel());        //Row 3, Col 1
-        frame.add(materialPanel);       //Row 3, Col 2
+        
+        frame.add(plotter.getPanel(), BorderLayout.CENTER);
+        frame.add(layout, BorderLayout.PAGE_END);
 
         frame.setVisible(true);
+    }
+
+    private void createPlotter()
+    {
+        plotter = Plotter.getPlotter();
+        lens = new Lens(100, 10, Material.GLASS, 10);
+        plotter.setLens(lens);
+        plotter.refresh();
     }
     
     /**
@@ -84,8 +95,8 @@ public class GUI implements ActionListener, ChangeListener
         frame = new JFrame();
         frame.setTitle(title);
         frame.setSize(width, height);
-        frame.setLayout(new GridLayout(3, 2));
-        frame.setResizable(false);
+        frame.setLayout(new BorderLayout());
+        //frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
@@ -94,6 +105,8 @@ public class GUI implements ActionListener, ChangeListener
      **/
     private void createPanels()
     {
+        layout = new JPanel(new GridLayout(0, 2));
+
         anglePanel = new JPanel();
         createAnglePanel();
 
@@ -108,6 +121,13 @@ public class GUI implements ActionListener, ChangeListener
 
         materialPanel = new JPanel();
         createMaterialPanel();
+
+        layout.add(anglePanel);
+        layout.add(curvePanel);
+        layout.add(rayOriginPanel);
+        layout.add(thickPanel);
+        layout.add(new JPanel());
+        layout.add(materialPanel);
     }
     
     /**
@@ -167,7 +187,7 @@ public class GUI implements ActionListener, ChangeListener
     {
         curveLabel = new JLabel("Lens Curvature:");
 
-        curveSlider = new JSlider(-10, 10, 0);
+        curveSlider = new JSlider(-20, 150, 0);
         curveSlider.setMajorTickSpacing(5);
         curveSlider.setPaintTicks(true);
         curveSlider.setPaintLabels(true);
@@ -191,7 +211,7 @@ public class GUI implements ActionListener, ChangeListener
     {
         thickLabel = new JLabel("Lens Thickness:");
 
-        thickSlider = new JSlider(0, 20, 0);
+        thickSlider = new JSlider(0, 50, 0);
         thickSlider.setMajorTickSpacing(5);
         thickSlider.setPaintTicks(true);
         thickSlider.setPaintLabels(true);
@@ -263,6 +283,7 @@ public class GUI implements ActionListener, ChangeListener
             
             curveField.setText(value + "");
             curveSlider.setValue(value);
+            lens.setFocalLength(value);
         }
         else if (textSource == thickField)
         {
@@ -272,12 +293,15 @@ public class GUI implements ActionListener, ChangeListener
             
             thickField.setText(value + "");
             thickSlider.setValue(value);
+            lens.setThickness(value);
         }
 
         if (comboSource == materialDropDown)
         {
-            //Edit the material.
+            lens.setMaterial((Material) materialDropDown.getSelectedItem());
         }
+
+        plotter.refresh();
     }
 
     /**
@@ -299,11 +323,15 @@ public class GUI implements ActionListener, ChangeListener
         else if (source == curveSlider)
         {
             curveField.setText(source.getValue() + "");
+            lens.setFocalLength(source.getValue());
         }
         else if (source == thickSlider)
         {
             thickField.setText(source.getValue() + "");
+            lens.setThickness(source.getValue());
         }
+
+        plotter.refresh();
     }
 
     /**
