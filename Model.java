@@ -57,7 +57,6 @@ public class Model {
             r1.setDistance(intersect[1]);
             r2 = lens.refract(r1, intersect[0], intersect[1]);
         }
-        
     }
 
     public int[] findIntersect(Lens lens, Ray ray) {
@@ -68,6 +67,7 @@ public class Model {
         int[] intersect;
         intersect = findIntersect(lens, ray, start, end);
         System.out.printf("Lens and ray intersect at [%d, %d]\n", intersect[0], intersect[1]);
+
         return intersect;
     }
 
@@ -76,11 +76,12 @@ public class Model {
         if (startX >= endX) return new int[]{startX, (int) ray.getY(startX)};
 
         int origX = (int) ray.getX();
+        int origY = (int) ray.getY();
 
         int x1 = (int) (0.5 +  startX);
-        int y1 = (int) (0.5 +  ray.getY(x1 - origX));
+        int y1 = origY - (int) (0.5 +  ray.getY(x1 - origX));
         int x2 = (int) (0.5 +  endX);
-        int y2 = (int) (0.5 +  ray.getY(x2 - origX));
+        int y2 = origY - (int) (0.5 +  ray.getY(x2 - origX));
 
         int midX = (int) (0.5 +  (x2 + x1) / 2);
         int midY = (int) (0.5 +  y1 - ((y1 - y2) / 2));
