@@ -64,7 +64,7 @@ public class Model {
         int[] intersect;
         if (lens.aimedAtBy(r1) && r1.getEnd()[0] > lens.getVertex()) {
             intersect = findEntrance(lens, r1);
-            //r1.setDistance(intersect[1]);
+            r1.setDistance(intersect[1]);
             r2 = lens.refract(r1, intersect[0], intersect[1]);
         }
 
@@ -76,7 +76,11 @@ public class Model {
     public int[] findEntrance(Lens lens, Ray ray) {
         int start = (int) ray.getX();
         int end = (int) ray.getEnd()[0];
-        int[] intersect = new int[]{200,-200};
+        int[] intersect;
+
+        if (ray.getDirection() > 0) intersect = new int[]{200,200};
+        else if (ray.getDirection() < 0) intersect = new int[]{200,-200};
+        else intersect = new int[]{200, 0};
 
         if (end > lens.getVertex()) {
             start = lens.getVertex();
