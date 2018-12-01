@@ -13,7 +13,7 @@ public class test {
         plotter.setName("Random Plotter");
         Model model = new Model();
 
-        Lens testLens = new Lens(10d, 10d, Material.GLASS, 80d);
+        Lens testLens = new Lens(100d, 10d, Material.GLASS, 80d);
         plotter.setLens(testLens);
 
         Ray ray1 = new Ray(12, 0.1);
@@ -27,7 +27,7 @@ public class test {
         int x2 = (int) ray1.getEnd()[0];
         int y2 = (int) ray1.getEnd()[1];
         //System.out.printf("%d, %d, %d, %d, Intersects: %b\n", x1, y1, x2, y2, testLens.getPath().intersects(x1, y1, x2, y2));
-        for (int i = 0; i < 10; i++) {
+/*        for (int i = 0; i < 10; i++) {
             ray1.setDirection(ray1.getDirection() + 0.05);
             ray1.setDistance(100);
             int[] intersect = model.findEntrance(testLens, ray1);
@@ -45,6 +45,10 @@ public class test {
                System.out.printf("%d\t%.2f\n", i, testLens.getY(i)[0]);
                 plotter.refresh();
             }
+        }*/
+
+        for(int i = (int) ray1.getX(); i < ray1.getEnd()[0]; i++) {
+            int j = (int) ray1.getY(i);
         }
 
     }
