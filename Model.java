@@ -53,8 +53,12 @@ public class Model {
         Ray r2;
         Ray r3;
 
-        int[] intersect;
+        int x1 = (int) (0.5 +  r1.getX());
+        int y1 = (int) (0.5 +  r1.getY());
+        int x2 = (int) (0.5 +  r1.getEnd()[0]);
+        int y2 = (int) (0.5 +  r1.getEnd()[1]);
 
+        int[] intersect;
         if (lens.getPath().intersects(x1, y1, x2, y2)) {
             intersect = findEntrance(lens, r1);
             r1.setDistance(intersect[1]);
