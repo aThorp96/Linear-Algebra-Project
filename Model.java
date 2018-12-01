@@ -22,7 +22,8 @@ import java.awt.geom.Area;
 
 public class Model {
 
-    public static final double   defaultRayAngle        = 0;
+    public static final double   origin                 = 200;
+    public static final double   defaultRayAngle        = .5;
     public static final double   defaultLensRadius      = 150;
     public static final double   defaultLensThickness   = 10;
     public static final double   defaultLensFocalLength = 40;
@@ -38,7 +39,7 @@ public class Model {
         Lens defaultLens = new Lens(defaultLensRadius, defaultLensThickness,
                                     defaultLensMaterial, defaultLensFocalLength);
         setLens(defaultLens);
-        Ray r1 = new Ray(defaultRayAngle);
+        Ray r1 = new Ray(10, defaultRayAngle);
         generateRays(r1);
     }
 
@@ -60,7 +61,7 @@ public class Model {
         int y2 = (int) (0.5 +  r1.getEnd()[1]);
 
         int[] intersect;
-        if (lens.getPath().intersects(x1, y1, x2, y2)) {
+        if (lens.aimedAtBy(r1) && r1.getEnd()[0] > lens.getVertex()) {
             intersect = findEntrance(lens, r1);
             r1.setDistance(intersect[1]);
             r2 = lens.refract(r1, intersect[0], intersect[1]);
@@ -74,32 +75,13 @@ public class Model {
     public int[] findEntrance(Lens lens, Ray ray) {
         int start = (int) ray.getX();
         int end = (int) ray.getEnd()[0];
-
-        // call private recursize method
         int[] intersect = new int[]{200,-200};
-        //intersect = findEntrance(lens, ray, start, end);
-        for (int i = 0; i < end - start; i++) {
-            int j = (int) ray.getY(i);
 
-            int x = i + (int) ray.getX();
-            int y = (int) j;
-
-            //System.out.println("\ntesting [" + x + ", " + y + "]");
-
-            if(lens.xIntersects(x)) {
-
-                double[] lensDouobleYs = lens.getY(x);
-                int[] lensYs = new int[]{(int) lensDouobleYs[0], (int) lensDouobleYs[1]};
-                //System.out.printf("Values of lens:\n\tY: %d\n\tUpper: %d\n\tLower: %d\n",y,  lensYs[0], lensYs[1]);
-
-                if (ray.getDirection() >= 0 && lensYs[0] - y <= 1 && lensYs[0] - y >= -1) {
-                    intersect = new int[]{x, lensYs[0]};
-                } else if(lensYs[1] - y <= 1 && lensYs[1] - y >= -1){
-                    intersect = new int[]{x, lensYs[1]};
-                }
-            }
+        if (end > lens.getVertex()) {
+            start = lens.getVertex();
+            end = lens.getCorner();
         }
-        //System.out.printf("Lens and ray intersect at [%d, %d]\n", intersect[0], intersect[1]);
+
 
         return intersect;
     }
@@ -144,6 +126,7 @@ public class Model {
     }
 
     public void setRayY(double y) {
+        y = origin - y;
         Ray r1 = rays.get(0);
         r1.setY(y);
 

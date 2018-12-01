@@ -62,6 +62,30 @@ public class Lens
     }
 
     /**
+    *   Returns the y x value of the corner of the lens.
+    *
+    *   @return the REAL x value, not relative
+    **/
+    public int getCorner() {
+        return (int) (origin - (thickness / 2));
+    }
+
+    /**
+    *   aimedAtBy returns whether or not the a given ray
+    *   is aimed through the lens.
+    *
+    *   @return whether or not the ray's y value at the corner
+    *           is between the bounds of each coner
+    **/
+    public boolean aimedAtBy(Ray r) {
+        int corner = getCorner();
+        int rayOffset  = (int) r.getX();
+        int rayAtCorner = (int) (r.getY(corner - rayOffset));
+
+        return rayAtCorner <= corner && rayAtCorner >= -corner;
+    }
+
+    /**
     *   getY returns the corresponding Y value to a given X value.
     *   The Ys returned are the upper and lower edges of the curve.
     *
@@ -103,6 +127,11 @@ public class Lens
 
         realYs = new double[]{y, origin + y};
         return realYs;
+    }
+
+    public int getVertex() {
+        double v = thickness + getCurve().getBounds().getWidth();
+        return (int) (origin - (v / 2));
     }
 
     /**

@@ -39,16 +39,19 @@ public class test {
                 TimeUnit.MILLISECONDS.sleep(500);
             } catch(Exception e) {}
         }
+        **/
         for (int i = 0; i < 200; i++) {
             if(testLens.xIntersects(i)) {
                plotter.plotPoint(i, testLens.getY(i)[0]);
                System.out.printf("%d\t%.2f\n", i, testLens.getY(i)[0]);
                 plotter.refresh();
             }
-        }*/
+        }
 
+        // test ray.getY
         for(int i = (int) ray1.getX(); i < ray1.getEnd()[0]; i++) {
             int j = (int) ray1.getY(i);
+            plotter.plotPoint(i, j);
         }
 
     }
