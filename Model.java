@@ -78,9 +78,9 @@ public class Model {
         int end = (int) ray.getEnd()[0];
         int[] intersect;
 
-        if (ray.getDirection() > 0) intersect = new int[]{200,200};
-        else if (ray.getDirection() < 0) intersect = new int[]{200,-200};
-        else intersect = new int[]{200, 0};
+        if (ray.getDirection() > 0) intersect = new int[]{200,(int) ray.getY()};
+        else if (ray.getDirection() < 0) intersect = new int[]{200,-(int) ray.getY()};
+        else intersect = new int[]{200, (int) ray.getY()};
 
         if (end > lens.getVertex()) {
             start = lens.getVertex();
@@ -126,15 +126,15 @@ public class Model {
         Ray r1 = rays.get(0);
         if (a > 0)
         {
-            r1.setDistance(200);
+            r1.setDistance(100);
         }
         else if (a < 0)
         {
-           r1.setDistance(-200);
+           r1.setDistance(-100);
         }
         else
         {
-           r1.setDistance(0);
+           r1.setDistance(200);
         }
 
         r1.setDirection(a);

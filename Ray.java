@@ -121,8 +121,14 @@ public class Ray {
         double x = this.x + (int) (0.5 + (matrix.get(0,0) / Math.sin(getDirection())));
 
         // if theta != 0, x2 = o / tan(theta)
-        if (getDirection() != 0) 
+        if (getDirection() != 0) {
             x = this.x + (int) (0.5 + (matrix.get(0,0) / Math.tan(getDirection())));
+            System.out.printf("y: %f, tan: %f, x: %f\n", y, Math.tan(getDirection()), x);
+        } else {
+            y = this.y;
+            x = 400;
+            System.out.printf("y: %f, cos: %f, x: %f\n", y, Math.cos(getDirection()), x);
+        }
 
         return new double[]{x, y};
     }
