@@ -144,13 +144,7 @@ public class Plotter {
             // g.setColor(lensColor);
             // ((Graphics2D)g).fill(new Area(lens.getPath()));
             g.setColor(Color.BLACK);
-            ((Graphics2D)g).draw(lens.getPath());
-            g.setColor(Color.BLUE);
-            ((Graphics2D)g).draw(lens.getCurve().getBounds());
-            for (Point2D i : points) {
-                Rectangle2D r = new Rectangle2D.Double(i.getX(), i.getY(), 0, 0);
-                ((Graphics2D)g).draw(r);
-            }
+            ((Graphics2D)g).draw(lens.getPath()); 
         }
 
         private void paintRays(Graphics g) {

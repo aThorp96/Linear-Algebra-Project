@@ -21,8 +21,9 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Area;
 
 public class Model {
-
-    public static final double   defaultRayAngle        = 0;
+    
+    public static final double   origin                 = 200;
+    public static final double   defaultRayAngle        = 0.5;
     public static final double   defaultLensRadius      = 150;
     public static final double   defaultLensThickness   = 10;
     public static final double   defaultLensFocalLength = 40;
@@ -38,7 +39,7 @@ public class Model {
         Lens defaultLens = new Lens(defaultLensRadius, defaultLensThickness,
                                     defaultLensMaterial, defaultLensFocalLength);
         setLens(defaultLens);
-        Ray r1 = new Ray(defaultRayAngle);
+        Ray r1 = new Ray(10, defaultRayAngle);
         generateRays(r1);
     }
 
@@ -135,15 +136,30 @@ public class Model {
     }
 
     public void setAngle(double a) {
+        a = Math.toRadians(a);
+        if (a > 0)
+        {
+            rays.get(0).setDistance(200);
+        }
+        else if (a < 0)
+        {
+           rays.get(0).setDistance(-200);
+        }
+        else
+        {
+           rays.get(0).setDistance(0);
+        }
+
         rays.get(0).setDirection(a);
         Ray r1 = rays.get(0);
-
+        
         generateRays(r1);
-
+        
         plotter.refresh();
     }
 
     public void setRayY(double y) {
+        y = origin - y;
         Ray r1 = rays.get(0);
         r1.setY(y);
 
