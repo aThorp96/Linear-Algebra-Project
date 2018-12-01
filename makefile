@@ -3,7 +3,7 @@ JAVA = java
 FLAGS = -g
 LIBS = -cp .:Jama\*:
 
-MAIN = test
+MAIN = GUI
 sources = Plotter.java Ray.java $(MAIN).java
 
 default:
