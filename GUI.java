@@ -25,6 +25,7 @@ public class GUI implements ActionListener, ChangeListener
     //GUI Outline
     private JFrame frame;
     private JPanel layout;
+    private Model model;
     private Plotter plotter;
     private Lens lens;
     //Ray Angle
@@ -63,8 +64,11 @@ public class GUI implements ActionListener, ChangeListener
      **/
     public GUI(String title, int width, int height)
     {
+        model = new Model();
         createPlotter();
         int canvasHeight = plotter.getCanvas().getHeight();
+        model.setLens(lens);
+
         createFrame(title, width, height + canvasHeight);
         createPanels();
         
@@ -232,7 +236,7 @@ public class GUI implements ActionListener, ChangeListener
         materialPanel.add(materialLabel);
 
         materialDropDown = new JComboBox(Material.values());
-        materialDropDown.setSelectedIndex(1);
+        materialDropDown.setSelectedIndex(2);
         materialDropDown.addActionListener(this);
         materialPanel.add(materialDropDown);
     }
@@ -265,6 +269,7 @@ public class GUI implements ActionListener, ChangeListener
             
             angleField.setText(value + "");
             angleSlider.setValue(value);
+            model.setAngle(value);
         }
         else if (textSource == rayOriginField)
         {
@@ -274,6 +279,7 @@ public class GUI implements ActionListener, ChangeListener
             
             rayOriginField.setText(value + "");
             rayOriginSlider.setValue(value);
+            model.setRayY(value);
         }
         else if (textSource == curveField)
         {
@@ -283,7 +289,7 @@ public class GUI implements ActionListener, ChangeListener
             
             curveField.setText(value + "");
             curveSlider.setValue(value);
-            lens.setFocalLength(value);
+            model.setFocalLength(value);
         }
         else if (textSource == thickField)
         {
@@ -293,12 +299,12 @@ public class GUI implements ActionListener, ChangeListener
             
             thickField.setText(value + "");
             thickSlider.setValue(value);
-            lens.setThickness(value);
+            model.setThickness(value);
         }
 
         if (comboSource == materialDropDown)
         {
-            lens.setMaterial((Material) materialDropDown.getSelectedItem());
+            model.setMaterial((Material) materialDropDown.getSelectedItem());
         }
 
         plotter.refresh();
@@ -315,20 +321,22 @@ public class GUI implements ActionListener, ChangeListener
         if (source == angleSlider)
         {
             angleField.setText(source.getValue() + "");
+            model.setAngle(source.getValue());
         }
         else if (source == rayOriginSlider)
         {
             rayOriginField.setText(source.getValue() + "");
+            model.setRayY(source.getValue());
         }
         else if (source == curveSlider)
         {
             curveField.setText(source.getValue() + "");
-            lens.setFocalLength(source.getValue());
+            model.setFocalLength(source.getValue());
         }
         else if (source == thickSlider)
         {
             thickField.setText(source.getValue() + "");
-            lens.setThickness(source.getValue());
+            model.setThickness(source.getValue());
         }
 
         plotter.refresh();
