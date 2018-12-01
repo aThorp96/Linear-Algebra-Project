@@ -119,21 +119,21 @@ public class Model {
 
     public void setAngle(double a) {
         a = Math.toRadians(a);
+        Ray r1 = rays.get(0);
         if (a > 0)
         {
-            rays.get(0).setDistance(200);
+            r1.setDistance(200);
         }
         else if (a < 0)
         {
-           rays.get(0).setDistance(-200);
+           r1.setDistance(-200);
         }
         else
         {
-           rays.get(0).setDistance(0);
+           r1.setDistance(0);
         }
 
-        rays.get(0).setDirection(a);
-        Ray r1 = rays.get(0);
+        r1.setDirection(a);
         
         generateRays(r1);
         
