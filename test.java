@@ -11,7 +11,7 @@ public class test {
 
         Plotter plotter = Plotter.getPlotter();
         plotter.setName("Random Plotter");
-        Model model = new Model(400);
+        Model model = new Model();
 
         Lens testLens = new Lens(10d, 10d, Material.GLASS, 80d);
         plotter.setLens(testLens);
