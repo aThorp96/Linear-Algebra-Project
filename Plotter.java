@@ -8,9 +8,12 @@
 
 import java.util.concurrent.TimeUnit;
 import java.util.Random;
+import java.util.ArrayList;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.QuadCurve2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.Area;
 
 
@@ -24,6 +27,11 @@ public class Plotter {
 
     private Plotter() {
         prepareGUI();
+    }
+
+    public void plotPoint(double x, double y) {
+        Point2D p = new Point2D.Double(x, y);
+        canvas.addPoint(p);
     }
 
     // prepareGUI handles the initialization
@@ -84,9 +92,11 @@ public class Plotter {
         Color lazerColor;
         Lens lens;
         Ray[] rays;
+        ArrayList<Point2D> points;
 
         // No-arg constructor sets the default size to 400x400
         public MyCanvas() {
+            points = new ArrayList<Point2D>();
             lensColor = LENS_COLOR;
             lazerColor = Color.RED;
             setBackground (Color.WHITE);
@@ -116,7 +126,12 @@ public class Plotter {
             // ((Graphics2D)g).fill(new Area(lens.getPath()));
             g.setColor(Color.BLACK);
             ((Graphics2D)g).draw(lens.getPath());
-
+            g.setColor(Color.BLUE);
+            ((Graphics2D)g).draw(lens.getCurve().getBounds());
+            for (Point2D i : points) {
+                Rectangle2D r = new Rectangle2D.Double(i.getX(), i.getY(), 0, 0);
+                ((Graphics2D)g).draw(r);
+            }
         }
 
         private void paintRays(Graphics g) {
@@ -135,6 +150,10 @@ public class Plotter {
         // 3: The exit ray
         private void setRay(Ray ray, int rayNumber) {
             if (ray != null) rays[rayNumber] = ray;
+        }
+
+        private void addPoint(Point2D p) {
+            points.add(p);
         }
 
         private void setLens(Lens lens) {

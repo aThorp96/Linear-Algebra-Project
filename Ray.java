@@ -49,7 +49,10 @@ public class Ray {
 
     public void setDistance(double y2) {
 
-        matrix.set(0, 0, y2);
+        if (y2 > y) {
+            y2 = y - y2;
+        }
+            matrix.set(0, 0, y2);
     }
 
     public void setX(double x) {
