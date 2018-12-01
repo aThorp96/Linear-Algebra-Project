@@ -24,6 +24,7 @@ public class Model {
 
     public static final double   origin                 = 200;
     public static final double   defaultRayAngle        = .5;
+
     public static final double   defaultLensRadius      = 150;
     public static final double   defaultLensThickness   = 10;
     public static final double   defaultLensFocalLength = 40;
@@ -117,11 +118,25 @@ public class Model {
     }
 
     public void setAngle(double a) {
+        a = Math.toRadians(a);
+        if (a > 0)
+        {
+            rays.get(0).setDistance(200);
+        }
+        else if (a < 0)
+        {
+           rays.get(0).setDistance(-200);
+        }
+        else
+        {
+           rays.get(0).setDistance(0);
+        }
+
         rays.get(0).setDirection(a);
         Ray r1 = rays.get(0);
-
+        
         generateRays(r1);
-
+        
         plotter.refresh();
     }
 

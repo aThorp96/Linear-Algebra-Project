@@ -25,6 +25,7 @@ public class GUI implements ActionListener, ChangeListener
     //GUI Outline
     private JFrame frame;
     private JPanel layout;
+    private Model model;
     private Plotter plotter;
     private Lens lens;
     //Ray Angle
@@ -49,7 +50,7 @@ public class GUI implements ActionListener, ChangeListener
     private JLabel thickLabel;
     //Lens Material
     private JPanel materialPanel;
-    private JComboBox materialDropDown;
+    private JComboBox<Material> materialDropDown;
     private JLabel materialLabel;
 
     /**
@@ -63,8 +64,11 @@ public class GUI implements ActionListener, ChangeListener
      **/
     public GUI(String title, int width, int height)
     {
+        model = new Model();
         createPlotter();
         int canvasHeight = plotter.getCanvas().getHeight();
+        model.setLens(lens);
+
         createFrame(title, width, height + canvasHeight);
         createPanels();
         
@@ -78,7 +82,7 @@ public class GUI implements ActionListener, ChangeListener
     {
         plotter = Plotter.getPlotter();
         lens = new Lens(100, 10, Material.GLASS, 10);
-        plotter.setLens(lens);
+        model.setLens(lens);
         plotter.refresh();
     }
     
@@ -163,7 +167,7 @@ public class GUI implements ActionListener, ChangeListener
     {
         rayOriginLabel = new JLabel("Ray Origin:");
 
-        rayOriginSlider = new JSlider(-10, 10, 0);
+        rayOriginSlider = new JSlider(-50, 50, 0);
         rayOriginSlider.setMajorTickSpacing(5);
         rayOriginSlider.setPaintTicks(true);
         rayOriginSlider.setPaintLabels(true);
@@ -231,8 +235,8 @@ public class GUI implements ActionListener, ChangeListener
         materialLabel = new JLabel("Lens Material:");
         materialPanel.add(materialLabel);
 
-        materialDropDown = new JComboBox(Material.values());
-        materialDropDown.setSelectedIndex(1);
+        materialDropDown = new JComboBox<Material>(Material.values());
+        materialDropDown.setSelectedIndex(2);
         materialDropDown.addActionListener(this);
         materialPanel.add(materialDropDown);
     }
@@ -247,14 +251,14 @@ public class GUI implements ActionListener, ChangeListener
     public void actionPerformed(ActionEvent event)
     {
         JTextField textSource = new JTextField();
-        JComboBox comboSource = new JComboBox();
+        JComboBox<Material> comboSource = new JComboBox<Material>();
         if (event.getSource() instanceof JTextField)
         {
             textSource = (JTextField) event.getSource();
         }
         else if (event.getSource() instanceof JComboBox)
         {
-            comboSource = (JComboBox) event.getSource();
+            comboSource = (JComboBox<Material>) event.getSource();
         }
 
         if (textSource == angleField)
@@ -263,8 +267,8 @@ public class GUI implements ActionListener, ChangeListener
             value = value >= angleSlider.getMinimum() ? value : angleSlider.getMinimum();
             value = value <= angleSlider.getMaximum() ? value : angleSlider.getMaximum();
             
-            angleField.setText(value + "");
             angleSlider.setValue(value);
+            model.setAngle(value);
         }
         else if (textSource == rayOriginField)
         {
@@ -272,8 +276,8 @@ public class GUI implements ActionListener, ChangeListener
             value = value >= rayOriginSlider.getMinimum() ? value : rayOriginSlider.getMinimum();
             value = value <= rayOriginSlider.getMaximum() ? value : rayOriginSlider.getMaximum();
             
-            rayOriginField.setText(value + "");
             rayOriginSlider.setValue(value);
+            model.setRayY(value);
         }
         else if (textSource == curveField)
         {
@@ -281,9 +285,8 @@ public class GUI implements ActionListener, ChangeListener
             value = value >= curveSlider.getMinimum() ? value : curveSlider.getMinimum();
             value = value <= curveSlider.getMaximum() ? value : curveSlider.getMaximum();
             
-            curveField.setText(value + "");
             curveSlider.setValue(value);
-            lens.setFocalLength(value);
+            model.setFocalLength(value);
         }
         else if (textSource == thickField)
         {
@@ -291,14 +294,13 @@ public class GUI implements ActionListener, ChangeListener
             value = value >= thickSlider.getMinimum() ? value : thickSlider.getMinimum();
             value = value <= thickSlider.getMaximum() ? value : thickSlider.getMaximum();
             
-            thickField.setText(value + "");
             thickSlider.setValue(value);
-            lens.setThickness(value);
+            model.setThickness(value);
         }
 
         if (comboSource == materialDropDown)
         {
-            lens.setMaterial((Material) materialDropDown.getSelectedItem());
+            model.setMaterial((Material) materialDropDown.getSelectedItem());
         }
 
         plotter.refresh();
@@ -315,20 +317,22 @@ public class GUI implements ActionListener, ChangeListener
         if (source == angleSlider)
         {
             angleField.setText(source.getValue() + "");
+            model.setAngle(source.getValue());
         }
         else if (source == rayOriginSlider)
         {
             rayOriginField.setText(source.getValue() + "");
+            model.setRayY(source.getValue());
         }
         else if (source == curveSlider)
         {
             curveField.setText(source.getValue() + "");
-            lens.setFocalLength(source.getValue());
+            model.setFocalLength(source.getValue());
         }
         else if (source == thickSlider)
         {
             thickField.setText(source.getValue() + "");
-            lens.setThickness(source.getValue());
+            model.setThickness(source.getValue());
         }
 
         plotter.refresh();
