@@ -37,22 +37,22 @@ public class Plotter {
     // prepareGUI handles the initialization
     // of the frame and GUI
     private void prepareGUI() {
-        frame = new Frame("");
+        /*frame = new Frame("");
         frame.setSize(410, 440);
         frame.setLayout(new GridLayout(1,1));
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent){
                 System.exit(0);
             }
-        });
+        });*/
         controlPanel = new Panel();
         controlPanel.setLayout(new FlowLayout());
 
         canvas = new MyCanvas();
 
         controlPanel.add(canvas);
-        frame.add(controlPanel);
-        frame.setVisible(true);
+        //frame.add(controlPanel);
+        //frame.setVisible(true);
 
     }
 
@@ -62,6 +62,26 @@ public class Plotter {
             plotterSingleton = new Plotter();
         }
         return plotterSingleton;
+    }
+    
+    /**
+     * Used for the GUI to add the panel into its frame.
+     *
+     * @return Panel The panel of the Plotter.
+     **/
+    public Panel getPanel()
+    {
+        return controlPanel;
+    }
+    
+    /**
+     * Used for the GUI to interact with the canvas.
+     *
+     * @return Canvas The canvas of the Plotter.
+     **/
+    public Canvas getCanvas()
+    {
+        return canvas;
     }
 
     // Set change the window title
@@ -113,7 +133,6 @@ public class Plotter {
         // ** This should never be called directly **
         // @param g: the internal Graphic. Not accessable in the current scope.
         public void paint(Graphics g) {
-        System.out.println("painting");
             // reset the color in case of change
             //Iterate through the data
             paintLens(g);
