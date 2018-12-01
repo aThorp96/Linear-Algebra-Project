@@ -64,7 +64,7 @@ public class Model {
         int[] intersect;
         if (lens.aimedAtBy(r1) && r1.getEnd()[0] > lens.getVertex()) {
             intersect = findEntrance(lens, r1);
-            r1.setDistance(intersect[1]);
+            //r1.setDistance(intersect[1]);
             r2 = lens.refract(r1, intersect[0], intersect[1]);
         }
 
