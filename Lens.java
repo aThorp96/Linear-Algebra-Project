@@ -92,8 +92,8 @@ public class Lens
     *   @param X: the real x value of the graph (not relative to the origin)
     *   @return tuple of Y values. [a, b] where a is above the origin and b is below the origin.
     **/
-    public double[] getY(int x) {
-        x = (int) (x - origin);
+    public double[] getY(double x) {
+        x = x - origin;
         double h = -(thickness / 2) - getCurve().getBounds().getWidth() / 2;
         double a = -(h - getFocalLength());
         double y = 0;
@@ -125,7 +125,9 @@ public class Lens
 
         }
 
-        realYs = new double[]{y, origin + y};
+        if (y != y) y = 0;
+
+        realYs = new double[]{0.5 + y, 0.5 + origin + y};
         return realYs;
     }
 
@@ -196,6 +198,7 @@ public class Lens
         Matrix s = rayIn.getMatrix();
         Matrix R = new Matrix(2, 2);
 
+        y = (int) origin - y;
         double m1;
         double m2;
         double r = getFocalRadius(x, y);
@@ -208,7 +211,7 @@ public class Lens
             m2 = Material.AIR.getRefractionIndex();
         }
 
-        R.set(0, 0, 1);
+        R.set(0, 0, (y < origin) ? 100 : 400);
         R.set(1, 0, 0);
         R.set(0, 1, ((m1 - m2) / (r * m2)));
         R.set(1, 1, m1 / m2);

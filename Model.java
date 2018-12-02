@@ -66,6 +66,7 @@ public class Model {
             intersect = findEntrance(lens, r1);
             r1.setDistance(intersect[1]);
             r2 = lens.refract(r1, intersect[0], intersect[1]);
+            rays.add(r2);
         }
 
         for(int i = 0; i < rays.size(); i++) {
@@ -87,15 +88,54 @@ public class Model {
             end = lens.getCorner();
         }
 
+        while (start < end) {
+            double lowerBound = lens.getY(start)[0];
+            double upperBound = lens.getY(start + 1)[0];
+            double rayY = Math.abs(ray.getY(start));
+            System.out.printf("Upper and Lower: %f - %f\n" +
+                              "           rayY: %f\n\n", lowerBound, upperBound, rayY);
+            if (rayY >= lowerBound && rayY <= upperBound) {
+                intersect[0] = (int) start;
+                intersect[1] = (int) (0.5 + ray.getY(start));
+                plotter.plotPoint(start, ray.getY() - ray.getY(start + 1));
+                break;
+            }
+            start++;
+        }
 
         return intersect;
     }
 
-    private int[] findEntrance(Lens lens, Ray ray, int startX, int endX) throws IndexOutOfBoundsException {
-        // base case
-        if (endX - startX <= 1) return new int[]{endX, (int) ray.getY(endX)};
+    public int[] findExit(Lens lens, Ray ray) {
+        int start = (int) ray.getX();
+        int end = (int) ray.getEnd()[0];
+        int[] intersect;
 
-        return null;
+        if (ray.getDirection() > 0) intersect = new int[]{200,(int) ray.getY()};
+        else if (ray.getDirection() < 0) intersect = new int[]{200,-(int) ray.getY()};
+        else intersect = new int[]{200, (int) ray.getY()};
+
+        if (end > lens.getVertex()) {
+            start = lens.getVertex();
+            end = lens.getCorner();
+        }
+
+        while (start < end) {
+            double lowerBound = origin - lens.getY(end - 1)[0];
+            double upperBound = origin - lens.getY(end)[0];
+            double rayY = ray.getY() - Math.abs(ray.getY(start));
+            System.out.printf("Upper and Lower: %f - %f\n" +
+                              "           rayY: %f\n\n", lowerBound, upperBound, rayY);
+            if (rayY >= lowerBound && rayY <= upperBound) {
+                intersect[0] = (int) start;
+                intersect[1] = (int) (0.5 + ray.getY(end));
+                plotter.plotPoint(start, ray.getY() - ray.getY(end + 1));
+                break;
+            }
+            end--;
+        }
+
+        return intersect;
     }
 
     public Lens getLens() {
@@ -108,22 +148,27 @@ public class Model {
 
     public void setFocalLength(double l) {
         lens.setFocalLength(l);
+        generateRays(getRay());
         plotter.refresh();
     }
 
     public void setMaterial(Material m) {
         lens.setMaterial(m);
+
+        generateRays(getRay());
         plotter.refresh();
     }
 
     public void setThickness(double d) {
         lens.setThickness(d);
+        generateRays(getRay());
         plotter.refresh();
     }
 
     public void setAngle(double a) {
         a = Math.toRadians(a);
         Ray r1 = rays.get(0);
+
         if (a > 0)
         {
             r1.setDistance(100);

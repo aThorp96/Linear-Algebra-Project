@@ -37,22 +37,13 @@ public class Plotter {
     // prepareGUI handles the initialization
     // of the frame and GUI
     private void prepareGUI() {
-        /*frame = new Frame("");
-        frame.setSize(410, 440);
-        frame.setLayout(new GridLayout(1,1));
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent windowEvent){
-                System.exit(0);
-            }
-        });*/
+
         controlPanel = new Panel();
         controlPanel.setLayout(new FlowLayout());
 
         canvas = new MyCanvas();
 
         controlPanel.add(canvas);
-        //frame.add(controlPanel);
-        //frame.setVisible(true);
 
     }
 
@@ -137,6 +128,7 @@ public class Plotter {
             //Iterate through the data
             paintLens(g);
             paintRays(g);
+            paintPoints(g);
         }
 
         private void paintLens(Graphics g) {
@@ -145,6 +137,12 @@ public class Plotter {
             // ((Graphics2D)g).fill(new Area(lens.getPath()));
             g.setColor(Color.BLACK);
             ((Graphics2D)g).draw(lens.getPath()); 
+        }
+
+        private void paintPoints(Graphics g) {
+            g.setColor(Color.GREEN);
+            for(Point2D i : points)
+                ((Graphics2D)g).draw(new Rectangle2D.Double(i.getX(), i.getY(), 0,0)); 
         }
 
         private void paintRays(Graphics g) {
