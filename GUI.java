@@ -33,11 +33,6 @@ public class GUI implements ActionListener, ChangeListener
     private JSlider angleSlider;
     private JTextField angleField;
     private JLabel angleLabel;
-    //Ray Origin
-    private JPanel rayOriginPanel;
-    private JSlider rayOriginSlider;
-    private JTextField rayOriginField;
-    private JLabel rayOriginLabel;
     //Lens Curve
     private JPanel curvePanel;
     private JSlider curveSlider;
@@ -100,7 +95,7 @@ public class GUI implements ActionListener, ChangeListener
         frame.setTitle(title);
         frame.setSize(width, height);
         frame.setLayout(new BorderLayout());
-        //frame.setResizable(false);
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
@@ -114,9 +109,6 @@ public class GUI implements ActionListener, ChangeListener
         anglePanel = new JPanel();
         createAnglePanel();
 
-        rayOriginPanel = new JPanel();
-        createRayOriginPanel();
-
         curvePanel = new JPanel();
         createCurvePanel();
 
@@ -128,9 +120,7 @@ public class GUI implements ActionListener, ChangeListener
 
         layout.add(anglePanel);
         layout.add(curvePanel);
-        layout.add(rayOriginPanel);
         layout.add(thickPanel);
-        layout.add(new JPanel());
         layout.add(materialPanel);
     }
     
@@ -159,30 +149,6 @@ public class GUI implements ActionListener, ChangeListener
     }
 
     /**
-     * Sets up the ray's origin panel and adds all the necessary
-     * elements into it. This includes its slider, text field,
-     * and a label to determine what the user is editing.
-     **/
-    private void createRayOriginPanel()
-    {
-        rayOriginLabel = new JLabel("Ray Origin:");
-
-        rayOriginSlider = new JSlider(-50, 50, 0);
-        rayOriginSlider.setMajorTickSpacing(5);
-        rayOriginSlider.setPaintTicks(true);
-        rayOriginSlider.setPaintLabels(true);
-        rayOriginSlider.addChangeListener(this);
-
-        rayOriginField = new JTextField(3);
-        rayOriginField.addActionListener(this);
-        rayOriginField.setText("0");
-
-        rayOriginPanel.add(rayOriginLabel);
-        rayOriginPanel.add(rayOriginField);
-        rayOriginPanel.add(rayOriginSlider);
-    }
-
-    /**
      * Sets up the len's curvature panel and adds all the necessary
      * elements into it. This includes its slider, text field,
      * and a label to determine what the user is editing.
@@ -191,7 +157,7 @@ public class GUI implements ActionListener, ChangeListener
     {
         curveLabel = new JLabel("Lens Curvature:");
 
-        curveSlider = new JSlider(-20, 150, 0);
+        curveSlider = new JSlider(0, 150, 0);
         curveSlider.setMajorTickSpacing(5);
         curveSlider.setPaintTicks(true);
         curveSlider.setPaintLabels(true);
@@ -270,15 +236,6 @@ public class GUI implements ActionListener, ChangeListener
             angleSlider.setValue(value);
             model.setAngle(value);
         }
-        else if (textSource == rayOriginField)
-        {
-            int value = Integer.valueOf(textSource.getText());
-            value = value >= rayOriginSlider.getMinimum() ? value : rayOriginSlider.getMinimum();
-            value = value <= rayOriginSlider.getMaximum() ? value : rayOriginSlider.getMaximum();
-            
-            rayOriginSlider.setValue(value);
-            model.setRayY(value);
-        }
         else if (textSource == curveField)
         {
             int value = Integer.valueOf(textSource.getText());
@@ -319,11 +276,6 @@ public class GUI implements ActionListener, ChangeListener
             angleField.setText(source.getValue() + "");
             model.setAngle(source.getValue());
         }
-        else if (source == rayOriginSlider)
-        {
-            rayOriginField.setText(source.getValue() + "");
-            model.setRayY(source.getValue());
-        }
         else if (source == curveSlider)
         {
             curveField.setText(source.getValue() + "");
@@ -345,6 +297,6 @@ public class GUI implements ActionListener, ChangeListener
      **/
     public static void main(String[] args)
     {
-        GUI gui = new GUI("Ray Observor", 600, 300);
+        GUI gui = new GUI("Ray Observor", 450, 175);
     }
 }

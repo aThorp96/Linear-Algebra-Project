@@ -61,12 +61,18 @@ public class Model {
         int x2 = (int) (0.5 +  r1.getEnd()[0]);
         int y2 = (int) (0.5 +  r1.getEnd()[1]);
 
-        int[] intersect;
+        int[] intersect1;
+        int[] intersect2;
         if (lens.aimedAtBy(r1) && r1.getEnd()[0] > lens.getVertex()) {
-            intersect = findEntrance(lens, r1);
-            r1.setDistance(intersect[1]);
-            r2 = lens.refract(r1, intersect[0], intersect[1]);
+            intersect1 = findEntrance(lens, r1);
+            r1.setDistance(intersect1[1]);
+            r2 = lens.refract(r1, intersect1[0], intersect1[1]);
             rays.add(r2);
+
+            intersect2 = findExit(lens, r2);
+            r2.setDistance(intersect2[1]);
+            r3 = lens.refract(r2, intersect2[0], intersect2[1]);
+            rays.add(r3);
         }
 
         for(int i = 0; i < rays.size(); i++) {
@@ -85,15 +91,15 @@ public class Model {
 
         if (end > lens.getVertex()) {
             start = lens.getVertex();
-            end = lens.getCorner();
+            end = lens.getCorner(true);
         }
 
         while (start < end) {
             double lowerBound = lens.getY(start)[0];
             double upperBound = lens.getY(start + 1)[0];
             double rayY = Math.abs(ray.getY(start));
-            System.out.printf("Upper and Lower: %f - %f\n" +
-                              "           rayY: %f\n\n", lowerBound, upperBound, rayY);
+            //System.out.printf("Upper and Lower: %f - %f\n" +
+            //                  "           rayY: %f\n\n", lowerBound, upperBound, rayY);
             if (rayY >= lowerBound && rayY <= upperBound) {
                 intersect[0] = (int) start;
                 intersect[1] = (int) (0.5 + ray.getY(start));
@@ -117,15 +123,15 @@ public class Model {
 
         if (end > lens.getVertex()) {
             start = lens.getVertex();
-            end = lens.getCorner();
+            end = lens.getCorner(false);
         }
 
         while (start < end) {
-            double lowerBound = origin - lens.getY(end - 1)[0];
-            double upperBound = origin - lens.getY(end)[0];
+            double lowerBound = lens.getY(end - 1)[0];
+            double upperBound = lens.getY(end)[0];
             double rayY = ray.getY() - Math.abs(ray.getY(start));
-            System.out.printf("Upper and Lower: %f - %f\n" +
-                              "           rayY: %f\n\n", lowerBound, upperBound, rayY);
+            //System.out.printf("Upper and Lower: %f - %f\n" +
+            //                  "           rayY: %f\n\n", lowerBound, upperBound, rayY);
             if (rayY >= lowerBound && rayY <= upperBound) {
                 intersect[0] = (int) start;
                 intersect[1] = (int) (0.5 + ray.getY(end));

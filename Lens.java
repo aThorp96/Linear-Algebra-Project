@@ -63,11 +63,12 @@ public class Lens
 
     /**
     *   Returns the y x value of the corner of the lens.
-    *
+    *   
+    *   @param right Which corner we're looking at
     *   @return the REAL x value, not relative
     **/
-    public int getCorner() {
-        return (int) (origin - (thickness / 2));
+    public int getCorner(boolean right) {
+        return right ? (int) (origin - (thickness / 2)) : (int) (origin + (thickness / 2));
     }
 
     /**
@@ -78,7 +79,7 @@ public class Lens
     *           is between the bounds of each coner
     **/
     public boolean aimedAtBy(Ray r) {
-        int corner = getCorner();
+        int corner = r.getEnd()[0] < origin ? getCorner(true) : getCorner(false);
         int rayOffset  = (int) r.getX();
         int rayAtCorner = (int) (r.getY(corner - rayOffset));
 
